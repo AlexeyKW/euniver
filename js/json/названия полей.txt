@@ -1,0 +1,92 @@
+Земельные участки
+Кадастровый номер - Kadastr_num
+Дата внесения - Kadastr_date
+Адрес - Adres
+Площадь - Plosad
+Документы - Documents
+
+Объекты недвижимости
+Номер ИАС - Num_IAS
+Тип локали - Type_locale
+Наименование - Naimenovanie
+Количество элементов - Kol_vo_elements
+Назначение - Naznachenie
+Мера кв.м. - Mera_kv_m
+Мера - Mera
+Наличие - Nalichie
+Площадь объекта - Plosad
+Адрес - Adres
+Инвентарный номер - Inventar_num
+Техническая - Technch
+Регистрации - Registracii
+Госрег_права - Gosreg
+Госрег_права1 - Gosreg_1
+Тип УЗ - Type_UZ
+Примечание - Primechanie
+Документы - Documents
+
+Учебный комплекс
+Корпус - Korpus
+Этаж - Etaj
+Институт - Institut
+Кафедра - Kafedra
+Номер - Nomer
+Аудиторный номер - Aud_nomer
+Наименование - Naimenovanie
+Количество - Kol_vo
+Наличие_ко - Nalichie_ko
+Наличие_му - Nalichie_mu
+Количество 1 - Kol_vo_1
+Фото - Photo
+Примечание - Primechanie
+Номер по т - Nomer_po_t
+Площадь по - Plosad_po
+Назначение - Naznachenie
+
+Общежитие плахотного 8_1
+Адрес - Adres
+Номер ИАС - Num_IAS
+Этаж - Etaj
+Номер комнаты - Nomer_komnati
+Номер комнаты 1 - Nomer_komnati_1
+Назначение - Naznachenie
+Площадь - Plosad
+Ремонт - Remont
+Состояние - Sostoyanie
+Количество - Kol_vo
+Пол проживающих - Pol_projiv
+Окно - Okno
+Дверь - Dver
+Освещение - Osveshenie
+Мебель - Mebel
+Заполнение - Zapolnenie
+Фото - Photo
+Количество 1 - Kol_vo_1
+Количество 2 - Kol_vo_2
+Количество 3 - Kol_vo_3
+Свободно - Svobodno
+Примечание - Primechanie
+
+Общежитие плахотного 8a
+Адрес - Adres
+Номер ИАС - Num_IAS
+Этаж - Etaj
+Номер комнаты - Nomer_komnati
+Номер комнаты 1 - Nomer_komnati_1
+Назначение - Naznachenie
+Площадь - Plosad
+Ремонт - Remont
+Состояние - Sostoyanie
+Количество - Kol_vo
+Пол проживающих - Pol_projiv
+Окно - Okno
+Дверь - Dver
+Освещение - Osveshenie
+Мебель - Mebel
+Заполнение - Zapolnenie
+Фото - Photo
+Количество 1 - Kol_vo_1
+Количество 2 - Kol_vo_2
+Количество 3 - Kol_vo_3
+Свободно - Svobodno
+Примечание - Primechanie
