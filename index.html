@@ -1,250 +1,593 @@
+<!DOCTYPE>
 <html>
-
 <head>
 	<!--<meta http-equiv="Cache-Control" content="no-cache">
 	<meta http-equiv="Cache-Control" content="private">
 	<meta http-equiv="Cache-Control" content="max-age=1, must-revalidate">
 	<meta http-equiv="Cache-Control" content="max-age=1, proxy-revalidate">-->
-
-	<meta charset="utf-8">
+	<meta charset="utf-8" />
 	<title>Thematic maps builder</title>
-	<link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="css/jquery.mCustomScrollbar.css">
-	<!--<script src="js/jquery-1.8.0.js"></script>
-	<script src="js/jquery-1.8.3.min.js"></script>-->
-	<script src="js/jquery-ui-1.8.23.custom.min.js"></script>
-	
-</head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css/leaflet.css" />
+	<link rel="stylesheet" href="css/L.Control.Pan.css" />
+	<link rel="stylesheet" href="css/leaflet-search.css" />
+	<link rel="stylesheet" href="css/Control.MiniMap.css" />
+    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.css" />
+	<link rel="stylesheet" href="css/info.css" />
+	<link rel="stylesheet" href="css/CreatePanel.css" />
+	<link rel="stylesheet" href="css/mapbuild.css" />	
+	<link rel="stylesheet" href="css/index.css" />	    
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/mainstyle.css" />	
 
-<body>
-<center>
-
-<!-- Само окно -->
-<div id="boxes">  
-<div id="dialog" id="dialog" class="window">
-<div id="t" class="text"> Выберите файл на компьютере</div>
-<div id="t1" class="text"> Выберите столбец с названием регионов</div>
-<div id="t2" class="text"> Выберите столбец с данными</div>
-<div class="top">
-<a href="#" class="link closed">Закрыть</a>
-</div>
-</br>
-<div id="form1" class="content">
-
-<form action="upload.php" method="post" target="hiddenframe" enctype="multipart/form-data" onsubmit="hideBtn();">
-
-<div id="file">
-<input type="file" id="userfile" name="userfile" />
-</div>
-
-<input type="submit" name="upload" id="upload" class="button2" value="Загрузить" />
-</form>
-<div id="res"></div>
-<iframe id="hiddenframe" name="hiddenframe" style="width:0px; height:0px; border:0px"></iframe>
-<input type="button" id="next" class="button2" value="далее">
-<input type="hidden" id="fname" value="">
-<input type="hidden" id="fpath" value="">
-<input type="hidden" id="regname" value="">
-</div>
-
-<div id="form2" class="content">
-<div id="res2"></div>
-<input type="button" id="back1" class="button1" value="назад">
-<input type="button" id="next1" class="button2" value="далее">
-</div>
-
-<div id="form3" class="content">
-<div id="res3"></div>
-<input type="button" id="back2" class="button1" value="назад">
-<input type="button" id="import" class="button2" value="готово">
-
-</div>
-</div>
-</div>
-<div id="mask"></div>
-</body>
-
-<script>
-$(document).ready(function() {   
-    $('a[name=modal]').click(function(e) {
-    e.preventDefault();
-    var id = $(this).attr('href');
-    var maskHeight = $(document).height();
-    var maskWidth = $(window).width();
-	
-	$('#next').css("display","none");
-	$('#upload').show();
-	$('#userfile').show();
-	$('#res').html("");
-	$("#form1").css("display","block");
-	
-	$(".text").css("display","none");
-	$("#t").css("display","block");
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.0.min.js"><\/script>')</script> 	
+	<script src="js/index.js"></script>
+	<script src="js/leaflet.js"></script>
+	<script type="text/javascript" src="borders.js"></script>
+	<script src="js/L.Control.Pan.js" ></script>
+	<script src="js/leaflet-search.js"></script>
+	<script src="js/Control.MiniMap.js"></script>
+	<script src="js/info.js"></script>
+	<script src="js/CreatePanel.js"></script>
+   
+	<script src="js/rainbowvis.js"></script>   
+	<script type="text/javascript" src="js/data/Земельные_участки.geojson"></script>
+	<script type="text/javascript" src="js/data/Объекты_недвижимости.geojson"></script>
+	<script type="text/javascript" src="js/data/Общежитие_Плахотного_8_1_Real.geojson"></script>
+	<script type="text/javascript" src="js/data/Общежитие_Плахотного_8а_Real.geojson"></script>
+	<script type="text/javascript" src="data/students.json"></script>
+    <script type="text/javascript" src="js/leaflet-button-control.js"></script>  
+    <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script type="text/javascript" src="js/rpso.js"></script>
+     
+	<script type="text/javascript" src="js/jquery.fancybox.js?v=2.1.5"></script>
+	<link rel="stylesheet" type="text/css" href="css/jquery.fancybox.css?v=2.1.5" media="screen" />
+	<link rel="stylesheet" type="text/css" href="css/helpers/jquery.fancybox-buttons.css?v=1.0.5" />
+	<script type="text/javascript" src="css/helpers/jquery.fancybox-buttons.js?v=1.0.5"></script>
+	<link rel="stylesheet" type="text/css" href="css/helpers/jquery.fancybox-thumbs.css?v=1.0.7" />
+	<script type="text/javascript" src="css/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+	<script type="text/javascript" src="css/helpers/jquery.fancybox-media.js?v=1.0.6"></script>
     
-	$('#mask').css({'width':maskWidth,'height':maskHeight,'z-index':9000});
-    $('#mask').fadeIn(1000); 
-    $('#mask').fadeTo("slow",0.8); 
-	$('#boxes, .window').css({'z-index':9999});
-    var winH = $(window).height();
-    var winW = $(window).width();
-    $(id).css('top',  winH/2-$(id).height()/2);
-    $(id).css('left', winW/2-$(id).width()/2);
-    $(id).fadeIn(2000); 
-    });
-    $('.window .closed').click(function (e) { 
-    e.preventDefault();
-	$("#form3").css("display","none");
-	$("#form2").css("display","none");
-	$('#next').css("display","none");
-    $('#mask, .window').hide();
-	$('#mask').css({'z-index':0});
-	$('#boxes, .window').css({'z-index':0});
-    }); 
-    //$('#mask').click(function () {
-    //$(this).hide();
-    //$('.window').hide();
-    //}); 
-	
-	
-	
-	$("#next").button().click(function()
-		{	            
-			$("#form1").css("display","none");
-			$("#form2").css("display","block");
-			
-			$("#t").css("display","none");
-			$("#t1").css("display","block");
-		});  	
-	
-	$("#next1").button().click(function()
-		{	            
-			$("#form2").css("display","none"); 	
-			$("#form3").css("display","block");
-			
-			$("#t1").css("display","none");
-			$("#t2").css("display","block");
-		});  
-	
-	$("#back1").button().click(function()
-		{	            
-			$("#form2").css("display","none");
-			$("#form1").css("display","block");	
-			
-			$("#t1").css("display","none");
-			$("#t").css("display","block");
-		});  
-	
-	$("#back2").button().click(function()
-		{	            
-			$("#form3").css("display","none");
-			$("#form2").css("display","block"); 
+    <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="js/jquery.dataTables.min.js"></script>    
+    
+</head>
+<body>
 
-			$("#t2").css("display","none");
-			$("#t1").css("display","block");			
-		});  
-   
-	
-    $("#import").click(function() {
-        importer();
-    });
-	
-   });  //Onload end
-   
-   
-		function hideBtn(){
-            $('#upload').hide();
-			$('#userfile').hide();
-            $('#res').html("Идет загрузка файла");
-        }
+	<div id="map" style="width: 100%; height: 100%"></div>	   
+	<script>
+        var $video_player, _player, _isPlaying = false;        
+        var summ=0;
+        var summ1=0;
+		var southWest = new L.LatLng(50, 60); 
+		var northEast = new L.LatLng(60, 100); 
+		var restrictBounds = new L.LatLngBounds(southWest, northEast); 
+		
+		var map = L.map('map', {mapOptions: {zoomControl: false, panControl: false}}).setView([54.987, 82.865	], 13	);
+		map.setMaxBounds(restrictBounds);
         
-        function handleResponse(mes) 
-		{
-            //$('#upload').show();
-            if (mes.errors != null) {
-				$('#upload').show();
-				$('#userfile').show();
-                $('#res').html("Возникли ошибки во время загрузки файла: " + mes.errors);
-            }    
-            else {
-				$('#next').css("display","block");
-				$('#res').html("Файл успешно загружен");				
-				var csvtitle = mes.radio.split(',');
-				var count = csvtitle.length;
-				
-				$('#res2').html("");
-				$('#res3').html("");
-				
-					for ( var i = 0; i < count; i++ ) 
-						{
-							$('#res2').append("<input type='radio' name='region' value='"+csvtitle[i]+"' />" +csvtitle[i]+"</br>");
-						}									
-				
-					for ( var i = 0; i < count; i++ ) 
-						{
-							$('#res3').append("<input type='checkbox' name='feature' value='"+csvtitle[i]+"' />" +csvtitle[i]+"</br>");
-						}			
-				$('#fname').val(mes.name);
-				$('#fpath').val(mes.path);
-				//$('#res').html("Файл " + mes.radio + " загружен"); 	
-				
-            }    
-        }
-		
-						
-	function importer(){		
-			var feature = [];			 					
-				$("#res3 input:checked").each(function() {feature.push($(this).val());});	
-				var featcount = feature.length;
-			//var feat = feature.join(',');
-			var featall = [];			 					
-				$("#res3 :checkbox").each(function() {featall.push($(this).val());});	
-			var reg = $("#res2 input:checked").val();
-			
-		if(reg !==undefined && featcount > 0){
-		
-			var fname = $("#fname").val();
-			var fpath = $("#fpath").val();
+		var osm_streets = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ', {
+			maxZoom: 20,
+			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+				'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+			id: 'mapbox.streets'
+		}).addTo(map);
+	var MapQuestOpen_Aerial = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
+	type: 'sat',
+	ext: 'jpg',
+	attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency',
+	subdomains: '1234'
+	});     
+    var osm_base = new L.TileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');	
+    var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    });
+    var Esri_WorldPhysical = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service',
+        maxZoom: 8
+    });
+                
+    var baseMaps = {
+        "MapBox Streets": osm_streets,
+        "OSM Base": osm_base,
+        "Esri World Imagery": Esri_WorldImagery,
+        "Esri World Physical": Esri_WorldPhysical,
+        "MapQuest Aerial": MapQuestOpen_Aerial
+    };
+    L.control.layers(baseMaps).addTo(map);
+
+        var uchastki_layer = new L.geoJson(uchastki, 
+        {
+            style: style,
+            onEachFeature: onEachFeature
+        }).addTo(map);  
+        var stroeniya_layer = new L.geoJson(nedvijimost, 
+        {
+            style: style,
+            onEachFeature: onEachFeature
+        }) 
+        var plahotnogo_8_1_layer = new L.geoJson(plahotnogo_8_1, 
+        {
+            style: newstyle,
+            onEachFeature: onEachFeature
+        })
+        var plahotnogo_8a_layer = new L.geoJson(plahotnogo_8a, 
+        {
+            style: newstyle,
+            onEachFeature: onEachFeature
+        }) 		
 					
-			//var queryString = "os=" + os;
-			//queryString += "&c=" + c + "&ds=" + ds + "&ser=" + ser;
-			$.ajax({
-				async: false,
-				type: "POST",
-				url:'import.php',
-				data:{
-				feat: feature,
-				featall: featall,
-				reg: reg,
-				fname: fname,
-				fpath: fpath
-				},
-				cache: false,
-				success:function(data){$('#mask, .window').hide();/*$('#res3').html(data);*/},
-				failure: function() {alert("Ajax request broken");}			   
-			});
-			
-					$("#form3").css("display","none");
-					$("#form2").css("display","none");
-			
-			var selecttext = '';		               
-				for ( var i = 0; i < featcount; i++ ) 
-					{
-						selecttext += "<option value='"+feature[i].toLowerCase().replace(/\s/g,"_")+"'>" +feature[i]+"</option>";
-					}	
-			$('#create0').html('');
-			$('#choose').remove();
-			$('#create0').append("Показатель</br><select id='choose'><option disabled>Выберите показатель</option>"+selecttext + "</select></br></br>");
-			$("#create1").css("display","block");						
-			//var filepath = 'gjson/'+fname+'.js';// Путь к файлу
-			$.getScript('gjson/'+fname+'.js');
-		}
-		else{alert("Вы не отметили необходимые поля");}
-			
+		function style() 
+        {
+			return  {
+				weight: 2,
+				opacity: 1,
+				color: 'orange',
+				dashArray: '5',
+				fillOpacity: 0.4,
+				fillColor: '#FFEDA0'
 			};
-	
-	
-</script>			
-   
+        }
+	function getColor(d) {
+			return d > 4  ? '#00962F' :
+                   d > 3  ? '#22BA51' :
+                   d > 2  ? '#4BDE79' :
+			       d > 1  ? '#7EEDA0' :
+			       d > 0  ? '#9EFFBC' :
+			                '#FFEDA0';
+		}
+        
+		function newstyle(feature, layer) 
+        {
+        //console.log(feature.properties.NAME);
+        //summ=summ*1+feature.properties.Количество*1;
+			return  {
+				weight: 2,
+				opacity: 1,
+				color: 'orange',
+				dashArray: '5',
+				fillOpacity: 0.5,
+				fillColor: getColor(feature.properties.Количество)
+			};
+        }     
+       		
+		function highlightFeature(e) {
+			var layer = e.target;
+			layer.setStyle({
+				weight: 5,
+				color: '#666',
+				dashArray: '',
+				fillOpacity: 0.5
+			});
 
+			if (!L.Browser.ie && !L.Browser.opera) {layer.bringToFront();}
+			info.update(layer.feature.properties);
+		}
+					
+		function resetHighlight(e) {
+            var layer = e.target;
+			uchastki_layer.resetStyle(e.target);
+            plahotnogo_8_1_layer.resetStyle(e.target);
+            plahotnogo_8a_layer.resetStyle(e.target);            
+			info.update();
+		}    
 
+		function showinfo(e) {
+            $(".form-container").show();
+            //$('.form-container').animate({'top':'200px'},200);
+            var prop = e.target.feature.properties
+            //console.log(e.target);
+            var str_info = "";
+			map.fitBounds(e.target.getBounds());            
+            $(".form-container").html('<div class="form-title"><h2>Информация</h2><a class="boxclose" id="boxclose"></a></div>');
+            str_info += "<div class = 'infocontainer'>";
+            for (var key in prop) 
+            {    
+                str_info += "<div class='form-title'><h3>"+key+"</h3></div>";
+                str_info += "<input class='form-field' type='text' name='"+key+"' value='"+prop[key]+"' />";                 
+            }
+            str_info += "</div>";
+                        
+            switch (e.target.feature.properties.Адрес) 
+            {
+                case "г.Новосибирск, ул.Плахотного, д.8/1":
+                    var room = e.target.feature.properties.Номер_комнаты_1
+                    var camp = e.target.feature.properties.Номер_ИАС
+                    str_info += "<div class = 'infocontainer2'><div class='form-title'><h3>Проживающие:</h3></div>";                    
+                    for (var i in students) { 
+                        if (students[i].Комната*1 == room*1 && students[i].Общежитие*1 == camp*1) 
+                        {
+                            str_info += "<div class='form-title'>"+students[i].ФИО+"</div>";
+                        }
+                    }
+                    str_info += "</div>";
+                    break
+                case "г.Новосибирск, ул.Плахотного, д.8а":
+                    var room = e.target.feature.properties.Номер_комнаты_1
+                    var camp = e.target.feature.properties.Номер_ИАС
+                    str_info += "<div class = 'infocontainer2'><div class='form-title'><h3>Проживающие:</h3></div>";                    
+                    for (var i in students) { 
+                        if (students[i].Комната*1 == room*1 && students[i].Общежитие*1 == camp*1) 
+                        {
+                            str_info += "<div class='form-title'>"+students[i].ФИО+"</div>";
+                        }
+                    }
+                    str_info += "</div>";
+                    break
+                case "Российская Федерация, 630108, Новосибирская область, г. Новосибирск, Ленинский район, ул.Плахотного, д.8/1":
+                    var room = e.target.feature.properties.Номер_комнаты_1
+                    var camp = e.target.feature.properties.Номер_ИАС
+                    str_info += "<div class = 'infocontainer2'><div class='form-title'><h3>Материалы:</h3></div>";
+                    str_info += "</br><a href='data/1 Здание общежития 5-этажное с подвалом/ОПИСЬ ДОКУМЕНТОВ ДЛЯ ОБЩЕЖИТИЯ 1.htm'>Документы</a>";
+                    str_info += "</br><a class='open_fancybox' href='img/DJI_0056_min.jpg'>Фото</a>"; 
+                    str_info += "</br><a href='media/main.mp4' class='fancy_video'>Видео</a>"
+                    break 
+                case "Российская Федерация, 630108, Новосибирская область, г. Новосибирск, Ленинский район, ул.Плахотного, д. 8а":
+                    var room = e.target.feature.properties.Номер_комнаты_1
+                    var camp = e.target.feature.properties.Номер_ИАС
+                    str_info += "<div class = 'infocontainer2'><div class='form-title'><h3>Материалы:</h3></div>";
+                    str_info += "</br><a href='data/2 Здание общежития 5-этажное с подвалом/ОПИСЬ ДОКУМЕНТОВ ДЛЯ ОБЩЕЖИТИЯ 2.htm'>Документы</a>";
+                    str_info += "</br><a class='open_fancybox' href='img/DJI_0056_min.jpg'>Фото</a>"; 
+                    str_info += "</br><a href='media/main.mp4' class='fancy_video'>Видео</a>"
+                    break
+                case "Российская Федерация, 630108, Новосибирская область, г. Новосибирск, Ленинский район, ул.Плахотного, д. 10":
+                    var room = e.target.feature.properties.Номер_комнаты_1
+                    var camp = e.target.feature.properties.Номер_ИАС
+                    str_info += "<div class = 'infocontainer2'><div class='form-title'><h3>Материалы:</h3></div>";
+                    str_info += "</br><a href='data/3 Здание учебного корпуса 4-этажное с подвалом/ОПИСЬ ДОКУМЕНТОВ ДЛЯ ЗДАНИЯ УЧЕБНОГО КОРПУСА 4-ЭТАЖНОГО С ПОДВАЛОМ.htm'>Документы</a>";
+                    str_info += "</br><a class='open_fancybox' href='img/DJI_0056_min.jpg'>Фото</a>"; 
+                    str_info += "</br><a href='media/main.mp4' class='fancy_video'>Видео</a>"
+                    break 
+                case "Российская Федерация, 630108, Новосибирская область, г. Новосибирск, Ленинский район, ул.Плахотного, д. 10/1":
+                    var room = e.target.feature.properties.Номер_комнаты_1
+                    var camp = e.target.feature.properties.Номер_ИАС
+                    str_info += "<div class = 'infocontainer2'><div class='form-title'><h3>Материалы:</h3></div>";
+                    str_info += "</br><a href='data/4 Здание лабораторного корпуса 5-этажное с подвалом/ОПИСЬ ДОКУМЕНТОВ ДЛЯ ЗДАНИЯ ЛАБОРАТОРНОГО КОРПУСА 5-ЭТАЖНОГО С ПОДВАЛОМ.htm'>Документы</a>";
+                    str_info += "</br><a class='open_fancybox' href='img/DJI_0056_min.jpg'>Фото</a>"; 
+                    str_info += "</br><a href='media/lab.mp4' class='fancy_video'>Видео</a>"
+                    str_info += "</div>";
+                    break                    
+            } 
+           
+            $(".form-container").append(str_info);            
+            $('#boxclose').click(function(){
+                //$('.form-container').animate({'top':'-200px'},500);
+                $(".form-container").hide();
+            });   
+            $(".infocontainer").mCustomScrollbar({
+					theme:"rounded-dots",
+					scrollInertia:550,
+					scrollbarPosition:"inside"
+            });
+            $(".open_fancybox").click(function() {        
+                $.fancybox.open([
+                    {
+                        href : 'img/DJI_0056.jpg',                
+                        title : '1st title'
+                    },
+                    {
+                        href : 'img/DJI_0144.jpg',                
+                        title : '2nd title'
+                    },
+                    {
+                        href : 'img/DJI_0442.jpg',                
+                        title : '3rd title'
+                    }
+                ], {
+                    padding : 0
+                });           
+                return false;       
+            });
+            jQuery(".fancy_video").fancybox({
+                // set type of content (we are building the HTML5 <video> tag as content)
+                type: "html",
+                // other API options
+                scrolling: "no",
+                fitToView: false,
+                autoSize: false,
+                beforeLoad: function () {
+                    // build the HTML5 video structure for fancyBox content with specific parameters
+                    this.content = "<video id='video_player' src='" + this.href + "' poster='" + $(this.element).data("poster") + "' width='360' height='360' controls='controls' preload='none' ></video>";
+                    // set fancyBox dimensions
+                    this.width = 360; // same as video width attribute
+                    this.height = 360; // same as video height attribute
+                },
+                afterShow: function () {
+                    // initialize MEJS player
+                    var $video_player = new MediaElementPlayer('#video_player', {
+                        defaultVideoWidth: this.width,
+                        defaultVideoHeight: this.height,
+                        success: function (mediaElement, domObject) {
+                            _player = mediaElement; // override the "mediaElement" instance to be used outside the success setting
+                            _player.load(); // fixes webkit firing any method before player is ready
+                            _player.play(); // autoplay video (optional)
+                            _player.addEventListener('playing', function () {
+                                _isPlaying = true;
+                            }, false);
+                        } // success
+                    });
+                },
+                beforeClose: function () {
+                    // if video is playing and we close fancyBox
+                    // safely remove Flash objects in IE
+                    if (_isPlaying && navigator.userAgent.match(/msie [6-8]/i)) {
+                        // video is playing AND we are using IE
+                        _player.remove(); // remove player instance for IE
+                        _isPlaying = false; // reinitialize flag
+                    };
+                }
+            });
+            
+            
+		}       
+        
+		function onEachFeature(feature, layer) {				
+			layer.on({
+				mouseover: highlightFeature,
+				mouseout: resetHighlight,
+				click: showinfo
+			});
+            switch (feature.properties.Адрес) 
+            {
+                case "г.Новосибирск, ул.Плахотного, д.8/1":
+                    summ=summ*1+feature.properties.Количество*1;
+                    break
+                case "г.Новосибирск, ул.Плахотного, д.8а":
+                    summ1=summ1*1+feature.properties.Количество*1;
+                    break                    
+            }           
+		}
+
+            function report1() {
+                str_table = "<div class='form-title'><h2>Отчет</h2><a class='boxclose' id='boxclose'></a></div><div class = 'infocontainer3'>";
+                str_table += "<table id='table_id' class='display'><thead><tr><th>ФИО</th><th>Пол</th><th>Гражданство</th><th>Комната</th></tr></thead><tbody>";            
+                for (var i in students) {
+                    if (students[i].Общежитие*1 == 1) 
+                    {
+                        str_table += "<tr><td>"+students[i].ФИО+"</td><td>"+students[i].Пол+"</td><td>"+students[i].Гражданство+"</td><td>"+students[i].Комната+"</td></tr>";
+                    }
+                }
+                str_table += "</tbody></table></div>";
+                $(".form-container").html(str_table);
+                $(".form-container").show();
+                $('#boxclose').click(function(){
+                    //$('.form-container').animate({'top':'-200px'},500);
+                    $(".form-container").hide();
+                });   
+                $(".infocontainer3").mCustomScrollbar({
+                        theme:"rounded-dots",
+                        scrollInertia:550,
+                        scrollbarPosition:"inside"
+                });
+                $('#table_id').DataTable();
+            }
+            function report2() {
+                str_table = "<div class='form-title'><h2>Отчет</h2><a class='boxclose' id='boxclose'></a></div><div class = 'infocontainer3'>";
+                str_table += "<table id='table_id' class='display'><thead><tr><th>ФИО</th><th>Пол</th><th>Гражданство</th><th>Комната</th></tr></thead><tbody>";            
+                for (var i in students) {
+                    if (students[i].Общежитие*1 == 2) 
+                    {
+                        str_table += "<tr><td>"+students[i].ФИО+"</td><td>"+students[i].Пол+"</td><td>"+students[i].Гражданство+"</td><td>"+students[i].Комната+"</td></tr>";
+                    }
+                }
+                str_table += "</tbody></table></div>";
+                $(".form-container").html(str_table);
+                $(".form-container").show();
+                $('#boxclose').click(function(){
+                    //$('.form-container').animate({'top':'-200px'},500);
+                    $(".form-container").hide();
+                });   
+                $(".infocontainer3").mCustomScrollbar({
+                        theme:"rounded-dots",
+                        scrollInertia:550,
+                        scrollbarPosition:"inside"
+                });
+                $('#table_id').DataTable();
+            }
+
+        
+    $(document).ready(function() {
+        //$( ".info" ).append( "<div class='form-title'><h2>Информация</h2></div>");
+        $('#create').append("</br><div id = 'create0'>");
+        $('#create').append("<div id = 'create1'>");
+        $('#create').append("<div id = 'create2'>");
+        $('#create').append("<div id = 'create3'>"); 
+
+        $('#navbox-trigger').click(function () {
+          return $('#navigation-bar').toggleClass('navbox-open');
+        });
+        return $(document).on('click', function (e) {
+          var $target;
+          $target = $(e.target);
+          if (!$target.closest('.navbox').length && !$target.closest('#navbox-trigger').length) {
+            return $('#navigation-bar').removeClass('navbox-open');
+          }
+        });
+    });
+
+ function uchastki_1_onClick() {
+        map.addLayer(uchastki_layer);
+        map.removeLayer(stroeniya_layer);
+        map.removeLayer(plahotnogo_8_1_layer);
+        map.removeLayer(plahotnogo_8a_layer);
+        map.addLayer(osm_base);
+        map.setView([54.987, 82.863], 16);
+    };
+    function uchastki_2_onClick() {
+        map.addLayer(uchastki_layer);
+        map.removeLayer(stroeniya_layer);
+        map.removeLayer(plahotnogo_8_1_layer);
+        map.removeLayer(plahotnogo_8a_layer);
+        map.addLayer(osm_base);
+        map.setView([55.049, 82.922], 16);
+    };
+    function stroeniya_1_onClick() {
+        map.removeLayer(uchastki_layer);
+        map.addLayer(stroeniya_layer);
+        map.removeLayer(plahotnogo_8_1_layer);
+        map.removeLayer(plahotnogo_8a_layer);
+        map.addLayer(osm_base);
+        map.setView([54.9865, 82.8633], 19);
+    };
+    function stroeniya_2_onClick() {
+        map.removeLayer(uchastki_layer);
+        map.addLayer(stroeniya_layer);
+        map.removeLayer(plahotnogo_8_1_layer);
+        map.removeLayer(plahotnogo_8a_layer);
+        map.addLayer(osm_base);
+        map.setView([54.9872, 82.8645], 19);
+    };
+    function stroeniya_3_onClick() {
+        map.removeLayer(uchastki_layer);
+        map.addLayer(stroeniya_layer);
+        map.removeLayer(plahotnogo_8_1_layer);
+        map.removeLayer(plahotnogo_8a_layer);
+        map.addLayer(osm_base);
+        map.setView([54.9863, 82.8648], 19);
+    };
+    function stroeniya_4_onClick() {
+        map.removeLayer(uchastki_layer);
+        map.addLayer(stroeniya_layer);
+        map.removeLayer(plahotnogo_8_1_layer);
+        map.removeLayer(plahotnogo_8a_layer);
+        map.addLayer(osm_base);
+        map.setView([54.9858, 82.8641], 19);
+    };
+    function floor_4_onClick() {
+        map.setZoom(16);
+        map.removeLayer(uchastki_layer);
+        map.removeLayer(stroeniya_layer);
+        map.addLayer(plahotnogo_8_1_layer);
+        map.removeLayer(plahotnogo_8a_layer);
+        for (var key in baseMaps)
+        {
+            map.removeLayer(baseMaps[key]);
+        }
+        map.fitBounds(plahotnogo_8_1_layer.getBounds());
+    };
+    function floor_3_onClick() {
+        map.setZoom(16);
+        map.removeLayer(uchastki_layer);
+        map.removeLayer(stroeniya_layer);
+        map.removeLayer(plahotnogo_8_1_layer);
+        map.addLayer(plahotnogo_8a_layer);
+        for (var key in baseMaps)
+        {
+            map.removeLayer(baseMaps[key]);
+        }
+        map.fitBounds(plahotnogo_8a_layer.getBounds());
+    };
+		
+		//var CreatePanel = new CreatePanel();
+		//map.addControl(CreatePanel);
+        var info = new info();
+        
+		info.onAdd = function (map) 
+        {
+			this._div = L.DomUtil.create('div', 'info');
+			this.update();
+			return this._div;
+		};
+        info.update = function (props)
+        {
+            var str_info = "";
+            if (typeof selectedfeat !== "undefined")
+            {
+                for (var key in props) {
+                   //alert(' name=' + key + ' value=' + props[key]);
+                   $( ".info" ).append( "<div class='form-title'><h2>Информация11</h2></div>");
+                }
+                this._div.innerHTML = '<h4>Информация</h4>' + (props ? '<b>' + props[reg.toLowerCase()] + ' район</b><br />' + props[selectedfeat.toLowerCase()] : 'Наведите на объект');
+            }
+            else
+            {
+                this._div.innerHTML = '<h4>Информация</h4>' //+ (props ? '<b>' + props.Kadastr_num + '</b>' : 'Наведите на объект');
+                str_info += "<div class='innerinfo'>";
+                var i = 0
+                for (var key in props) {
+                    i++;
+                    if (i < 10)
+                    {
+                        key = key.replace("_", " ");
+                        key = key.replace("_", " ");
+                        str_info += "<b>"+key+"</b> : ";
+                        str_info += props[key]+"; ";
+                    }
+                }
+                str_info += "</div>";
+                $(".info").append(str_info);
+            }
+        };
+		info.addTo(map);        
+        
+        var redIcon = L.icon({
+            iconUrl: 'images/marker-icon_1m.png',
+            iconSize:     [25, 41], // size of the icon
+            iconAnchor:   [14, 35], // point of the icon which will correspond to marker's location
+            popupAnchor:  [-1, -25] // point from which the popup should open relative to the iconAnchor
+        });
+
+	var markersLayer = new L.LayerGroup();	//layer contain searched elements
+	map.addLayer(markersLayer);
+	
+	map.addControl( new L.Control.Search({layer: markersLayer, initial: false}) );  //inizialize search control
+	
+	map.on( "zoomend", function( e ) {
+    if ( map.getZoom( ) <= 8 ) {
+		map.addLayer(markersLayer);
+    }
+
+	});
+	</script>
+	<div id="maptitle" style="width: 55%; height: 50px">
+	<p style="color:rgba(253, 114, 2, 1);">eUniver</p>
+	</div>
+<div id="jsontotable" class="jsontotable"></div>    
+    <form class="form-container">
+    <div class="submit-container">
+    <input class="submit-button" type="submit" value="Submit" />
+    </div>
+    </form>
+ 
+<div id="footer">
+   <div id="rp_list" class="rp_list">
+                        <ul>
+                                <li>
+                                        <div>
+                                                <img src="images/droptext.jpg" alt=""/>
+                                                <span class="rp_title"><a id="myLink" href="#" onclick="uchastki_1_onClick();return false;">Плахотного 10</a></span>
+                        <span class="rp_title"><a id="myLink" href="#" onclick="uchastki_2_onClick();return false;">Писарева</a></span>
+                                        </div>
+                                </li>
+                                <li>
+                                <div>
+                                                <img src="images/droptext1.jpg" alt=""/>
+                                                <span class="rp_title"><a id="myLink" href="#" onclick="stroeniya_1_onClick();return false;">Плахотного 10</a></span>
+                                                <span class="rp_title"><a id="myLink" href="#" onclick="stroeniya_2_onClick();return false;">Пархоменко 9</a></span>
+                        <span class="rp_title"><a id="myLink" href="#" onclick="stroeniya_3_onClick();return false;">Плахотного 8</a></span>
+                        <span class="rp_title"><a id="myLink" href="#" onclick="stroeniya_4_onClick();return false;">Плахотного 8/1</a></span>
+                                        </div>
+                                </li>
+                                <li>
+                                        <div>
+                                                <img src="images/droptext2.jpg" alt=""/>
+                        <span class="rp_title"><a id="myLink" href="#" onclick="floor_3_onClick();return false;">Плахотного 8а</a></span>
+                        <span class="rp_title"><a id="myLink" href="#" onclick="floor_4_onClick();return false;">Плахотного 8/1</a></span>
+                                        </div>
+                                </li>
+    <li>
+                                        <div>
+                                                <img src="images/droptext3.jpg" alt=""/>
+                                                <span class="rp_title"><a id="myLink" href="#" onclick="report1();return false;">Общежитие 1</a></span>
+                                                <span class="rp_title"><a id="myLink" href="#" onclick="report2();return false;">Общежитие 2</a></span>
+                                        </div>
+                                </li>
+
+                        </ul>
+                </div>
+        </div> 
+    
+</body>
 </html>
