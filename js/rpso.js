@@ -19,7 +19,7 @@
 					var loaded	= 0;
 					//show 5 random posts from all the ones in the list. 
 					//Make sure not to repeat
-					while(loaded < 4){
+					while(loaded < 5){
 						var r 		= Math.floor(Math.random()*elems_cnt);
 						var $elem	= $list.find('li:nth-child('+ (r+1) +')');
 						if($elem.is(':visible'))

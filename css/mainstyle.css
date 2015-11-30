@@ -199,3 +199,9 @@ span.rp_links a:hover{
 	background-color:#000;
 	color:#fff;
 }
+.rp_select {
+	margin: 10px 10px 10px 10px;
+	padding: 10px 20px;
+	font-size:10px;
+	color: #aaa;
+}

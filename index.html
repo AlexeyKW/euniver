@@ -100,7 +100,7 @@
 
         var uchastki_layer = new L.geoJson(uchastki, 
         {
-            style: style,
+            style: style_uchastki,
             onEachFeature: onEachFeature
         }).addTo(map);  
         var stroeniya_layer = new L.geoJson(nedvijimost, 
@@ -119,13 +119,23 @@
             onEachFeature: onEachFeature
         }) 		
 					
-		function style() 
+		function style(feature, layer) 
         {
 			return  {
 				weight: 2,
 				opacity: 1,
 				color: 'orange',
 				dashArray: '5',
+				fillOpacity: 0.4,
+				fillColor: '#FFEDA0'
+			};
+        }
+				function style_uchastki(feature, layer) 
+        {
+			return  {
+				weight: 2,
+				opacity: 1,
+				color: 'green',
 				fillOpacity: 0.4,
 				fillColor: '#FFEDA0'
 			};
@@ -423,13 +433,16 @@
         map.addLayer(osm_base);
         map.setView([55.049, 82.922], 16);
     };
-    function stroeniya_1_onClick() {
+    function stroeniya_1_onClick(s_index) {
         map.removeLayer(uchastki_layer);
         map.addLayer(stroeniya_layer);
         map.removeLayer(plahotnogo_8_1_layer);
         map.removeLayer(plahotnogo_8a_layer);
         map.addLayer(osm_base);
-        map.setView([54.9865, 82.8633], 19);
+		if (s_index == "Плахотного 10"){map.setView([54.9865, 82.8633], 19);};
+        if (s_index == "Пархоменко 9"){map.setView([54.9872, 82.8645], 19);};
+		if (s_index == "Плахотного 8"){map.setView([54.9863, 82.8648], 19);};
+		if (s_index == "Плахотного 8/1"){map.setView([54.9858, 82.8641], 19);};
     };
     function stroeniya_2_onClick() {
         map.removeLayer(uchastki_layer);
@@ -564,17 +577,19 @@
                                 <li>
                                 <div>
                                                 <img src="images/droptext1.jpg" alt=""/>
-                                                <span class="rp_title"><a id="myLink" href="#" onclick="stroeniya_1_onClick();return false;">Плахотного 10</a></span>
-                                                <span class="rp_title"><a id="myLink" href="#" onclick="stroeniya_2_onClick();return false;">Пархоменко 9</a></span>
-                        <span class="rp_title"><a id="myLink" href="#" onclick="stroeniya_3_onClick();return false;">Плахотного 8</a></span>
-                        <span class="rp_title"><a id="myLink" href="#" onclick="stroeniya_4_onClick();return false;">Плахотного 8/1</a></span>
+												<select class="rp_select" onchange="stroeniya_1_onClick(this.options[this.selectedIndex].value)">
+													<option>Плахотного 10</option>
+													<option>Пархоменко 9</option>
+													<option>Плахотного 8</option>
+													<option>Плахотного 8/1</option>
+												</select>
                                         </div>
                                 </li>
                                 <li>
                                         <div>
                                                 <img src="images/droptext2.jpg" alt=""/>
-                        <span class="rp_title"><a id="myLink" href="#" onclick="floor_3_onClick();return false;">Плахотного 8а</a></span>
-                        <span class="rp_title"><a id="myLink" href="#" onclick="floor_4_onClick();return false;">Плахотного 8/1</a></span>
+												<span class="rp_title"><a id="myLink" href="#" onclick="floor_3_onClick();return false;">Плахотного 8а</a></span>
+												<span class="rp_title"><a id="myLink" href="#" onclick="floor_4_onClick();return false;">Плахотного 8/1</a></span>
                                         </div>
                                 </li>
     <li>
@@ -584,7 +599,13 @@
                                                 <span class="rp_title"><a id="myLink" href="#" onclick="report2();return false;">Общежитие 2</a></span>
                                         </div>
                                 </li>
-
+    <li>
+                                        <div>
+                                                <img src="images/droptext4.jpg" alt=""/>
+                                                <span class="rp_title"><a id="myLink" href="#" onclick="report1();return false;">Общежитие 1</a></span>
+                                                <span class="rp_title"><a id="myLink" href="#" onclick="report2();return false;">Общежитие 2</a></span>
+                                        </div>
+                                </li>
                         </ul>
                 </div>
         </div> 
