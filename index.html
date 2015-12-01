@@ -6,7 +6,7 @@
 	<meta http-equiv="Cache-Control" content="max-age=1, must-revalidate">
 	<meta http-equiv="Cache-Control" content="max-age=1, proxy-revalidate">-->
 	<meta charset="utf-8" />
-	<title>Thematic maps builder</title>
+	<title>eUniver</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="css/leaflet.css" />
 	<link rel="stylesheet" href="css/L.Control.Pan.css" />
@@ -36,6 +36,8 @@
 	<script type="text/javascript" src="js/data/Объекты_недвижимости.geojson"></script>
 	<script type="text/javascript" src="js/data/Общежитие_Плахотного_8_1_Real.geojson"></script>
 	<script type="text/javascript" src="js/data/Общежитие_Плахотного_8а_Real.geojson"></script>
+	<script type="text/javascript" src="js/data/Учебный_комплекс_на_Плахотного.geojson"></script>
+	<script type="text/javascript" src="js/data/Техникум.geojson"></script>    
 	<script type="text/javascript" src="data/students.json"></script>
     <script type="text/javascript" src="js/leaflet-button-control.js"></script>  
     <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
@@ -107,17 +109,27 @@
         {
             style: style,
             onEachFeature: onEachFeature
-        }) 
+        });
         var plahotnogo_8_1_layer = new L.geoJson(plahotnogo_8_1, 
         {
             style: newstyle,
             onEachFeature: onEachFeature
-        })
+        });
         var plahotnogo_8a_layer = new L.geoJson(plahotnogo_8a, 
         {
             style: newstyle,
             onEachFeature: onEachFeature
-        }) 		
+        });
+        var technikum_layer = new L.geoJson(technikum, 
+        {
+            style: newstyle,
+            onEachFeature: onEachFeature
+        });
+        var uch_kompleks = new L.geoJson(uchebnii_kompleks, 
+        {
+            style: newstyle,
+            onEachFeature: onEachFeature
+        });	
 					
 		function style(feature, layer) 
         {
@@ -438,19 +450,24 @@
         map.addLayer(stroeniya_layer);
         map.removeLayer(plahotnogo_8_1_layer);
         map.removeLayer(plahotnogo_8a_layer);
-        map.addLayer(osm_base);
+        map.removeLayer(uch_kompleks);
+        map.addLayer(osm_streets);
 		if (s_index == "Плахотного 10"){map.setView([54.9865, 82.8633], 19);};
         if (s_index == "Пархоменко 9"){map.setView([54.9872, 82.8645], 19);};
 		if (s_index == "Плахотного 8"){map.setView([54.9863, 82.8648], 19);};
 		if (s_index == "Плахотного 8/1"){map.setView([54.9858, 82.8641], 19);};
     };
-    function stroeniya_2_onClick() {
+    function uch_kompleks_1_onClick(s_index) {
         map.removeLayer(uchastki_layer);
-        map.addLayer(stroeniya_layer);
+        map.removeLayer(stroeniya_layer);
         map.removeLayer(plahotnogo_8_1_layer);
         map.removeLayer(plahotnogo_8a_layer);
-        map.addLayer(osm_base);
-        map.setView([54.9872, 82.8645], 19);
+        map.removeLayer(osm_streets);
+        map.removeLayer(uch_kompleks);
+        map.removeLayer(technikum_layer);
+        if (s_index == "Учебный корпус"){map.addLayer(uch_kompleks); map.setView([54.98904, 82.86343], 17);};
+        if (s_index == "Лабораторный корпус"){map.addLayer(uch_kompleks); map.setView([54.98909, 82.86900], 17);};
+        if (s_index == "Техникум"){map.addLayer(technikum_layer); map.setView([55.04966, 82.92610], 17);};
     };
     function stroeniya_3_onClick() {
         map.removeLayer(uchastki_layer);
@@ -602,8 +619,11 @@
     <li>
                                         <div>
                                                 <img src="images/droptext4.jpg" alt=""/>
-                                                <span class="rp_title"><a id="myLink" href="#" onclick="report1();return false;">Общежитие 1</a></span>
-                                                <span class="rp_title"><a id="myLink" href="#" onclick="report2();return false;">Общежитие 2</a></span>
+												<select class="rp_select" onchange="uch_kompleks_1_onClick(this.options[this.selectedIndex].value)">
+													<option>Учебный корпус</option>
+													<option>Лабораторный корпус</option>
+													<option>Техникум</option>
+												</select>
                                         </div>
                                 </li>
                         </ul>
