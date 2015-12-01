@@ -18,7 +18,8 @@
 	<link rel="stylesheet" href="css/mapbuild.css" />	
 	<link rel="stylesheet" href="css/index.css" />	    
     <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="css/mainstyle.css" />	
+    <link rel="stylesheet" type="text/css" href="css/mainstyle.css" />
+    <link rel="stylesheet" type="text/css" href="css/leaflet.label.css" />	
 
     <script src="js/jquery-1.11.0.min.js"></script>
     <script>window.jQuery || document.write('<script src="js/jquery-1.11.0.min.js"><\/script>')</script> 	
@@ -30,6 +31,7 @@
 	<script src="js/Control.MiniMap.js"></script>
 	<script src="js/info.js"></script>
 	<script src="js/CreatePanel.js"></script>
+	<script src="js/leaflet.label.js"></script>
    
 	<script src="js/rainbowvis.js"></script>   
 	<script type="text/javascript" src="js/data/Земельные_участки.geojson"></script>
@@ -351,6 +353,7 @@
 				mouseout: resetHighlight,
 				click: showinfo
 			});
+
             switch (feature.properties.Адрес) 
             {
                 case "г.Новосибирск, ул.Плахотного, д.8/1":
@@ -359,9 +362,10 @@
                 case "г.Новосибирск, ул.Плахотного, д.8а":
                     summ1=summ1*1+feature.properties.Количество*1;
                     break                    
-            }           
+            }
+			return layer.bindLabel(feature.properties['Количество'], { 'noHide': true, direction: 'auto' });			
 		}
-
+		
             function report1() {
                 str_table = "<div class='form-title'><h2>Отчет</h2><a class='boxclose' id='boxclose'></a></div><div class = 'infocontainer3'>";
                 str_table += "<table id='table_id' class='display'><thead><tr><th>ФИО</th><th>Пол</th><th>Гражданство</th><th>Комната</th></tr></thead><tbody>";            
