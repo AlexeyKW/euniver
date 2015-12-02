@@ -67,8 +67,14 @@
 		var southWest = new L.LatLng(50, 60); 
 		var northEast = new L.LatLng(60, 100); 
 		var restrictBounds = new L.LatLngBounds(southWest, northEast); 
+		var markers = new L.FeatureGroup();
 		
-		var map = L.map('map', {mapOptions: {zoomControl: false, panControl: false}}).setView([54.987, 82.865	], 13	);
+        var greenIcon = L.icon({
+            iconUrl: 'images/blank_icon.png',
+            iconSize:     [1, 1], // size of the icon
+        });
+        
+        var map = L.map('map', {mapOptions: {zoomControl: false, panControl: false}}).setView([54.987, 82.865	], 13	);
 		map.setMaxBounds(restrictBounds);
         
 		var osm_streets = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ', {
@@ -100,6 +106,11 @@
         "Esri World Physical": Esri_WorldPhysical,
         "MapQuest Aerial": MapQuestOpen_Aerial
     };
+    
+    map.on('zoomend', function() {
+        drawGrid();
+    });
+    
     L.control.layers(baseMaps).addTo(map);
 
         var uchastki_layer = new L.geoJson(uchastki, 
@@ -122,6 +133,7 @@
             style: newstyle,
             onEachFeature: onEachFeature
         });
+
         var technikum_layer = new L.geoJson(technikum, 
         {
             style: newstyle,
@@ -358,17 +370,15 @@
             {
                 case "г.Новосибирск, ул.Плахотного, д.8/1":
                     summ=summ*1+feature.properties.Количество*1;
-					var polygonCenter = layer.getBounds().getCenter();
-					L.marker(polygonCenter)
-					.bindLabel(feature.properties['Количество'], { noHide: true })
-					.addTo(map).showLabel();
                     break
                 case "г.Новосибирск, ул.Плахотного, д.8а":
                     summ1=summ1*1+feature.properties.Количество*1;
-					var polygonCenter = layer.getBounds().getCenter();
+                    var polygonCenter = layer.getBounds().getCenter();
+					var marker = L.marker(polygonCenter, {icon: greenIcon}).bindLabel(feature.properties['Номер_комнаты_1'], { noHide: true, direction: 'auto' });
+                    markers.addLayer(marker);
                     break                    
             }
-			return layer.bindLabel(feature.properties['Количество'], { 'noHide': true, direction: 'auto' });			
+						
 		}
 		
             function report1() {
@@ -520,6 +530,10 @@
             map.removeLayer(baseMaps[key]);
         }
         map.fitBounds(plahotnogo_8a_layer.getBounds());
+        map.addLayer(markers);
+        markers.eachLayer(function(marker) {
+        marker.showLabel();
+        });
     };
 		
 		//var CreatePanel = new CreatePanel();
