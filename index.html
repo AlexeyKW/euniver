@@ -358,9 +358,14 @@
             {
                 case "г.Новосибирск, ул.Плахотного, д.8/1":
                     summ=summ*1+feature.properties.Количество*1;
+					var polygonCenter = layer.getBounds().getCenter();
+					L.marker(polygonCenter)
+					.bindLabel(feature.properties['Количество'], { noHide: true })
+					.addTo(map).showLabel();
                     break
                 case "г.Новосибирск, ул.Плахотного, д.8а":
                     summ1=summ1*1+feature.properties.Количество*1;
+					var polygonCenter = layer.getBounds().getCenter();
                     break                    
             }
 			return layer.bindLabel(feature.properties['Количество'], { 'noHide': true, direction: 'auto' });			
@@ -466,7 +471,10 @@
         map.removeLayer(stroeniya_layer);
         map.removeLayer(plahotnogo_8_1_layer);
         map.removeLayer(plahotnogo_8a_layer);
-        map.removeLayer(osm_streets);
+		for (var key in baseMaps)
+        {
+            map.removeLayer(baseMaps[key]);
+        }
         map.removeLayer(uch_kompleks);
         map.removeLayer(technikum_layer);
         if (s_index == "Учебный корпус"){map.addLayer(uch_kompleks); map.setView([54.98904, 82.86343], 17);};
